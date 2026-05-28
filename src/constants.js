@@ -1,0 +1,40 @@
+export const WA_NUMBER = '5547997202400'
+
+export const STEPS = [
+  { num: 1, title: 'Dados Pessoais',      sub: 'Identificação e contato' },
+  { num: 2, title: 'Perfil de Viagem',    sub: 'Hábitos e destinos' },
+  { num: 3, title: 'Experiência Premium', sub: 'Padrão e preferências' },
+  { num: 4, title: 'Cartões & Milhas',    sub: 'Programas e gastos' },
+  { num: 5, title: 'Expectativas',        sub: 'O que busca na gestão' },
+]
+
+export const INIT = {
+  email: '',
+  nome: '',
+  cpf: '',
+  telefone: '',
+  endereco: '',
+  viagens_nac: '',
+  viagens_int: '',
+  viaja_com: [],
+  flexibilidade: '',
+  paises_deseja: '',
+  destino_sonho: '',
+  viagens_planejadas: '',
+  preferencia_destino: '',
+  classes: [],
+  cia: '',
+  first_class: '',
+  aceita_conexao: '',
+  valoriza: [],
+  gasto: '',
+  cartoes: '',
+  fidelidade: '',
+  milhas: '',
+  foco: [],
+  hoteis: '',
+  servicos: [],
+  exigencia: '',
+  nao_abre_mao: '',
+  info_adicional: '',
+}
