@@ -195,3 +195,18 @@ select option { background: #fff; color: var(--text); }
   to   { opacity: 1; transform: scale(1); }
 }
 .pop-in { animation: popIn 0.35s ease forwards; }
+
+
+/* Responsividade do Hero - coloque no seu CSS principal */
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto 50vh !important;
+  }
+  
+  /* Ajuste para o carrossel no mobile */
+  .hero-grid > div:last-child {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
