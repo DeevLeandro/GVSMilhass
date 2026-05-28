@@ -2,11 +2,31 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      viewport-fit=cover: garante que o conteúdo chegue até as bordas
+      no iPhone com notch/Dynamic Island, sem corte de barra superior.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>GVS Milhas — Pré-Cadastro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+      /*
+       * CRÍTICO: html, body e #root precisam de altura 100%
+       * para que 100dvh/100svh funcionem corretamente no Vite+React.
+       * Sem isso, o #root tem height: auto e os filhos com
+       * min-height: 100vh colapsam ou não preenchem a tela.
+       */
+      html, body {
+        height: 100%;
+      }
+      #root {
+        height: 100%;
+        /* Isola o root do fluxo — evita scroll parasita no iOS */
+        isolation: isolate;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

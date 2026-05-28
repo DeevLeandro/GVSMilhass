@@ -28,7 +28,6 @@ body {
   font-family: var(--sans);
   background: var(--bg-warm);
   color: var(--text);
-  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -36,23 +35,167 @@ body {
 ::-webkit-scrollbar-track { background: var(--bg-warm); }
 ::-webkit-scrollbar-thumb { background: var(--gold-line); border-radius: 2px; }
 
-/* ── Hero responsivo ── */
-.hero-grid {
-  grid-template-columns: 1fr 1fr !important;
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO — Desktop
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/*
+ * .hero-root
+ *
+ * USA height (não min-height) para que o grid tenha
+ * uma altura real para distribuir entre as colunas.
+ * min-height sozinho não cria "contexto de altura" para
+ * filhos com position:absolute — height sim.
+ *
+ * 100dvh = Dynamic Viewport Height: desconta barra do browser
+ * no iOS Safari e Chrome Mobile. Fallback: 100vh.
+ */
+.hero-root {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;      /* fallback */
+  height: 100dvh;     /* iOS Safari 15.4+, Chrome 108+ */
 }
 
+/*
+ * .hero-left
+ * Flex coluna com espaço entre topo / centro / rodapé.
+ * height: 100% herda a altura do grid row.
+ */
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(28px, 4vw, 60px);
+  background: linear-gradient(135deg, #0A0A0A 0%, rgba(10,10,10,0.95) 100%);
+  height: 100%;
+  overflow-y: auto; /* scroll interno se o conteúdo for maior que a tela */
+}
+
+/*
+ * .hero-right
+ * position: relative obrigatório para os filhos absolute.
+ * overflow: hidden apenas aqui (no carrossel), não no pai.
+ * height: 100% herda do grid row.
+ */
+.hero-right {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  height: 100%;
+}
+
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-weight: 400;
+  color: #FFF;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO — Setas do carrossel
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+.carousel-arrow-left  { left: 20px; }
+.carousel-arrow-right { right: 20px; }
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO — Mobile (≤ 768px)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 @media (max-width: 768px) {
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: auto auto;
+
+  /*
+   * Mobile: coluna única.
+   * O carrossel usa aspect-ratio 4/3 em vez de altura fixa.
+   * Isso garante que a imagem NUNCA seja cortada — ela sempre
+   * mostra a proporção completa independente da largura da tela.
+   */
+  .hero-root {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto; /* ambas as rows crescem com conteúdo */
+    height: auto;
   }
-  .hero-photos {
-    min-height: 320px;
-    grid-template-rows: 1fr 1fr;
+
+  .hero-left {
+    height: auto;
+    padding: 32px 20px 28px;
+    overflow-y: visible;
+  }
+
+  /*
+   * aspect-ratio: 1/1 = quadrado — cobre tanto fotos paisagem
+   * quanto retrato sem cortar independente da proporção original.
+   */
+  .hero-right {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+  }
+
+  /*
+   * object-fit: contain mostra a imagem INTEIRA sem cortar nenhum pixel.
+   * O fundo preto do .hero-right preenche as bordas eventuais.
+   */
+  .hero-right img {
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+
+  .carousel-arrow {
+    width: 32px;
+    height: 32px;
+  }
+  .carousel-arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Título menor no mobile */
+  .hero-h1 {
+    font-size: clamp(34px, 9vw, 48px);
+    margin-bottom: 20px;
   }
 }
 
-/* ── Inputs ── */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO — Laptop pequeno (769–1024px)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-left {
+    padding: clamp(20px, 3vw, 36px);
+  }
+  .hero-h1 {
+    font-size: clamp(30px, 3.8vw, 46px);
+  }
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Inputs, selects, textareas
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 input, textarea, select {
   width: 100%;
   font-family: var(--sans);
@@ -85,10 +228,12 @@ select {
   background-position: right 14px center;
   padding-right: 36px;
 }
-
 select option { background: #fff; color: var(--text); }
 
-/* ── Opções customizadas ── */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Opções customizadas
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .custom-option {
   display: flex;
   align-items: center;
@@ -104,44 +249,30 @@ select option { background: #fff; color: var(--text); }
   color: var(--text-mid);
   user-select: none;
 }
-
-.custom-option:hover { border-color: var(--gold); color: var(--text); }
-
-.custom-option.active {
-  border-color: var(--gold);
-  background: var(--gold-pale);
-  color: var(--gold-hover);
-  font-weight: 400;
-}
+.custom-option:hover  { border-color: var(--gold); color: var(--text); }
+.custom-option.active { border-color: var(--gold); background: var(--gold-pale); color: var(--gold-hover); font-weight: 400; }
 
 .dot {
   width: 16px; height: 16px; flex-shrink: 0;
-  border: 1.5px solid var(--border-input);
-  border-radius: 50%;
+  border: 1.5px solid var(--border-input); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.18s;
 }
-
 .dot.active { border-color: var(--gold); background: var(--gold); }
-
-.dot.active::after {
-  content: '';
-  width: 6px; height: 6px;
-  background: white;
-  border-radius: 50%;
-}
+.dot.active::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; }
 
 .sq {
   width: 16px; height: 16px; flex-shrink: 0;
-  border: 1.5px solid var(--border-input);
-  border-radius: 3px;
+  border: 1.5px solid var(--border-input); border-radius: 3px;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.18s;
 }
-
 .sq.active { border-color: var(--gold); background: var(--gold); }
 
-/* ── Botões ── */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Botões
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .btn-primary {
   background: var(--gold);
   color: #fff;
@@ -159,8 +290,7 @@ select option { background: #fff; color: var(--text); }
   align-items: center;
   gap: 10px;
 }
-
-.btn-primary:hover { background: var(--gold-hover); transform: translateY(-1px); }
+.btn-primary:hover    { background: var(--gold-hover); transform: translateY(-1px); }
 .btn-primary:disabled { background: var(--text-faint); cursor: not-allowed; transform: none; }
 
 .btn-ghost {
@@ -177,13 +307,14 @@ select option { background: #fff; color: var(--text); }
   cursor: pointer;
   transition: all 0.2s;
 }
-
 .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ── Erro ── */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Restante do app (formulário)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .err { color: var(--red); font-size: 12px; margin-top: 5px; font-weight: 400; }
 
-/* ── Animações ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -195,18 +326,3 @@ select option { background: #fff; color: var(--text); }
   to   { opacity: 1; transform: scale(1); }
 }
 .pop-in { animation: popIn 0.35s ease forwards; }
-
-
-/* Responsividade do Hero - coloque no seu CSS principal */
-@media (max-width: 768px) {
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: auto 50vh !important;
-  }
-  
-  /* Ajuste para o carrossel no mobile */
-  .hero-grid > div:last-child {
-    min-height: 50vh !important;
-    height: 50vh !important;
-  }
-}
