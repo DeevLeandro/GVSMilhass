@@ -1,14 +1,14 @@
+// App.jsx - VERSÃO APENAS EMAIL
 import { useState, useCallback } from 'react'
-import { INIT, STEPS, WA_NUMBER } from './constants'
-import { buildWhatsAppMessage } from './utils'
+import { INIT, STEPS } from './constants'
+import { sendEmail } from './services/resend'  // Serviço de email
 import { Hero } from './components/Hero'
 import { Header } from './components/Header'
 import { Success } from './components/Success'
-import { WhatsAppIcon } from './components/UI'
 import { StepDados, StepViagens, StepPremium, StepFinanceiro, StepExpectativas } from './components/Steps'
 
 export default function App() {
-  const [screen, setScreen] = useState('hero') // 'hero' | 'form' | 'success'
+  const [screen, setScreen] = useState('hero')
   const [f, setF] = useState(INIT)
   const [step, setStep] = useState(0)
   const [errs, setErrs] = useState({})
@@ -55,14 +55,31 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  function submit() {
+  async function submit() {
     setSending(true)
-    const msg = buildWhatsAppMessage(f)
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank')
-    setTimeout(() => {
+    
+    try {
+      // Enviar apenas o email via Resend
+      const emailResult = await sendEmail(f)
+      
+      if (!emailResult.ok) {
+        console.error('Falha ao enviar email:', emailResult.error)
+        alert('Erro ao enviar formulário. Tente novamente.')
+        setSending(false)
+        return
+      }
+      
+      // Sucesso - mostrar tela de confirmação
+      setTimeout(() => {
+        setSending(false)
+        setScreen('success')
+      }, 500)
+      
+    } catch (error) {
+      console.error('Erro no envio:', error)
+      alert('Erro ao enviar formulário. Tente novamente.')
       setSending(false)
-      setScreen('success')
-    }, 500)
+    }
   }
 
   if (screen === 'hero') {
@@ -143,12 +160,9 @@ export default function App() {
           ) : (
             <button className="btn-primary" onClick={submit} disabled={sending}>
               {sending ? (
-                'Abrindo WhatsApp...'
+                'Enviando...'
               ) : (
-                <>
-                  <WhatsAppIcon />
-                  Enviar via WhatsApp
-                </>
+                'Enviar cadastro por email'
               )}
             </button>
           )}

@@ -1,3 +1,4 @@
+// components/Success.jsx
 export function Success({ onReset }) {
   return (
     <div
@@ -76,8 +77,9 @@ export function Success({ onReset }) {
             marginBottom: 36,
           }}
         >
-          Suas informações foram encaminhadas ao Guilherme via WhatsApp. Em breve você receberá
-          uma proposta personalizada de gestão de milhas e experiências de alto padrão.
+          Suas informações foram enviadas para <strong>guilherme@gvsmilhas.com.br</strong>. 
+          Em breve você receberá uma proposta personalizada de gestão de milhas e experiências 
+          de alto padrão.
         </p>
 
         <div style={{ width: 40, height: 1, background: 'var(--border)', margin: '0 auto 36px' }} />
