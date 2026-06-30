@@ -112,7 +112,7 @@ export async function sendEmail(formData) {
         html: buildEmailHTML(formData),
       }),
     })
-
+//refeito o codigo 
     const data = await res.json()
 
     if (!res.ok) {
