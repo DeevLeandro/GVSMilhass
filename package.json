@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "resend": "^6.16.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",

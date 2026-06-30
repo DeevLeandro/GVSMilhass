@@ -1,3 +1,6 @@
+// src/services/resend.js
+// Este arquivo é para o front-end com Vite
+
 const TO_EMAIL = 'gvsmilhas@gmail.com'
 const FROM_EMAIL = 'onboarding@resend.dev'
 
@@ -94,11 +97,12 @@ function buildEmailHTML(f) {
         </table>
       </td>
     </tr>
-  </td>
+  </table>
 </body>
 </html>`
 }
 
+// Exportação nomeada (NÃO use export default para funções)
 export async function sendEmail(formData) {
   try {
     const res = await fetch('/api/resend', {
@@ -112,18 +116,29 @@ export async function sendEmail(formData) {
         html: buildEmailHTML(formData),
       }),
     })
-//refeito o codigo 
-    const data = await res.json()
+
+    let data
+    try {
+      data = await res.json()
+    } catch (parseError) {
+      console.error('Erro ao parsear resposta:', parseError)
+      const text = await res.text()
+      console.error('Resposta não-JSON:', text.substring(0, 200))
+      return { 
+        ok: false, 
+        error: 'Servidor retornou resposta inválida. Verifique a rota da API.' 
+      }
+    }
 
     if (!res.ok) {
       console.error('[Resend] erro:', data)
-      return { ok: false, error: data }
+      return { ok: false, error: data.error || 'Erro ao enviar email' }
     }
 
     console.log('[Resend] email enviado com sucesso:', data.id)
     return { ok: true, id: data.id }
   } catch (err) {
     console.error('[Resend] falha de rede:', err)
-    return { ok: false, error: err.message }
+    return { ok: false, error: err.message || 'Falha na conexão' }
   }
 }
