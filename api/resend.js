@@ -1,5 +1,5 @@
 // api/resend.js
-const RESEND_API_KEY = 're_KFofgexw_6DWx5JH9UdtV4jXuG9FUG3vB'; // chave NOVA, nunca a antiga
+const RESEND_API_KEY = 're_8d1qqGKR_HozaeUqdnVMzAv7VQ75Pkfp5'; // chave NOVA, nunca a antiga
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,6 +1,6 @@
 
 
-  const RESEND_API_KEY = import.meta.env.VITE_RESEND_KEY ?? 're_KFofgexw_6DWx5JH9UdtV4jXuG9FUG3vB'
+  const RESEND_API_KEY = import.meta.env.VITE_RESEND_KEY ?? 're_8d1qqGKR_HozaeUqdnVMzAv7VQ75Pkfp5'
 
 
   const TO_EMAIL = 'guilherme@gvsmilhas.com.br'
